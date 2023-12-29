@@ -1,0 +1,117 @@
+<ui:composition template="/WEB-INF/template/Template.xhtml"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="title">Java JSF com Primefaces</ui:define>
+	
+	<ui:define name="body">
+	
+		<!-- https://www.youtube.com/watch?v=FhdvdyvTd2o&list=PLnOrFdw5rkTyj3km618OLh5nCatSELRFh&index=50 -->
+		<h:form id="form">
+			
+			<!-- area para visualizar as menssages -->
+			<p:messages autoUpdate="true" closable="true" />
+					
+			<h:panelGrid columns="2" style="margin-top: 20px;">
+			
+				<p:outputLabel value="Medicamento" />
+				<p:inputText size="30" value="#{medicamentoMB.medicamento.nome}" required="true" label="Medicamento"/>
+				
+				<p:outputLabel value="Apresentação" />
+				<p:inputText size="30" value="#{medicamentoMB.medicamento.apresentacao}" required="true" label="Apresentação"/>
+				
+				<p:outputLabel value="Laboratorio" />
+				<p:selectOneMenu value="#{medicamentoMB.medicamento.laboratorio}" required="true" label="Laboratorio" filter="true">
+					<f:selectItem itemLabel="Selecione um Laboratorio ..........." noSelectionOption="true" />
+					<f:selectItem itemLabel="Bayer" itemValue="Bayer" />
+					<f:selectItem itemLabel="Neo Quimica" itemValue="Neo Quimica" />
+					<f:selectItem itemLabel="E-MS" itemValue="E-MS" />
+					<f:selectItem itemLabel="Legrand" itemValue="Legrand" />
+					<f:selectItem itemLabel="Eurofarma" itemValue="Eurofarma" />
+					<f:selectItem itemLabel="Cemed" itemValue="Cemed" />
+					<f:selectItem itemLabel="Medley" itemValue="Medley" />
+					<f:selectItem itemLabel="Biossintetica" itemValue="Biossintetica" />
+					<f:selectItem itemLabel="Actavis" itemValue="Actavis" />
+					<f:selectItem itemLabel="Nova Quimica" itemValue="Nova Quimica" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Registro MS" />
+				<p:inputMask mask="9.9999.9999.999-9" size="30" value="#{medicamentoMB.medicamento.registro}" required="true" label="Registro MS"/>
+				
+				<p:outputLabel value="Preço" />
+				<p:inputText maxlength="6" size="30" value="#{medicamentoMB.medicamento.preco}" required="true" label="Preço">
+					<f:convertNumber minFractionDigits="2" locale="pt_br" minIntegerDigits="0" />
+				</p:inputText>
+				
+				<h:outputText value="Remedio Controlado?"/>
+				<p:selectOneRadio value="#{medicamentoMB.medicamento.controlado}">
+					<f:selectItem itemLabel="Sim" itemValue="SIM" />
+					<f:selectItem itemLabel="Não" itemValue="NAO"/>
+					<p:ajax event="click" process="@this" />
+				</p:selectOneRadio>
+				
+				<p:outputLabel value="" />
+				<p:commandButton class="btn btn-primary" value="Cadastrar" action="#{medicamentoMB.adicionar}" update="form tabelas" style="margin-top: 10px; float: inline-end" rendered="#{medicamentoMB.tipoCadastro eq 'SAVE'}">
+					<p:confirm header="Confirmação" message="Tem certeza que deseja cadastrar este medicamento?"/>
+				</p:commandButton>
+				
+				<div style="display: flex; justify-content: center;">
+					
+					<p:commandButton value="Cancelar" action="#{medicamentoMB.cancelar}" update="form tabelas" style="margin-top: 10px; float: inline-end" rendered="#{medicamentoMB.tipoCadastro eq 'UPDATE'}" />
+					
+					<p:commandButton class="btn btn-warning" value="Atualizar" action="#{medicamentoMB.adicionar}" update="form tabelas" style="margin-top: 10px; float: inline-end" rendered="#{medicamentoMB.tipoCadastro eq 'UPDATE'}">
+						<p:confirm header="Confirmação" message="Tem certeza que deseja atualizar este medicamento?"/>
+					</p:commandButton>
+					
+				</div>
+				
+				<!--  -->
+			</h:panelGrid>
+
+			<p:dataTable value="#{medicamentoMB.medicamentos}" var="med" id="tabelas" paginator="true" rows="5" style="margin-top: 20px;">
+				
+				<p:column headerText="Medicamento">
+					<p:outputLabel value="#{med.nome}" />
+				</p:column>
+				
+				<p:column headerText="Apresentação">
+					<p:outputLabel value="#{med.apresentacao}" />
+				</p:column>
+				
+				<p:column headerText="Laboratório">
+					<p:outputLabel value="#{med.laboratorio}" />
+				</p:column>
+				
+				<p:column headerText="Registro MS">
+					<p:outputLabel value="#{med.registro}" />
+				</p:column>
+				
+				<p:column headerText="R$ Preço" width="150">
+					<p:outputLabel value="#{med.preco}">
+						<f:convertNumber type="currency" currencySymbol="R$"/>
+					</p:outputLabel>
+				</p:column>
+				
+				<p:column headerText="Remedio Controlado" width="150">
+					<p:outputLabel value="#{med.controlado}" />
+				</p:column>
+				
+				<p:column headerText="Ações" width="100">
+					<p:commandButton class="btn-warning" action="#{medicamentoMB.changeButton}" icon="ui-icon-pencil" update="@form" process="@this" >
+						<f:setPropertyActionListener value="#{med}" target="#{medicamentoMB.medicamento}" />
+					</p:commandButton>
+					<p:commandButton class="btn-danger" action="#{medicamentoMB.excluir}" icon="ui-icon-trash" update="tabelas" process="@this" >
+						<p:confirm header="Confirmação" message="Tem certeza que deseja excluir este medicamento?"/>
+						<f:setPropertyActionListener value="#{med}" target="#{medicamentoMB.medicamento}" />
+					</p:commandButton>
+				</p:column>		
+			
+			</p:dataTable>
+			
+		</h:form>
+	</ui:define>
+
+</ui:composition>
