@@ -25,6 +25,7 @@ public class Medicamento implements Serializable, Base {
 	private String registro;
 	private BigDecimal preco;
 	private String controlado;
+	private Boolean desconto;
 	
 	public Long getId() {
 		return id;
@@ -80,6 +81,15 @@ public class Medicamento implements Serializable, Base {
 
 	public void setControlado(String controlado) {
 		this.controlado = controlado;
+	}
+
+	
+	public Boolean getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Boolean desconto) {
+		this.desconto = desconto;
 	}
 
 	@Override

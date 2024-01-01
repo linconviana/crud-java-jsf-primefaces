@@ -35,7 +35,7 @@ public class MedicamentoController implements Serializable {
 	private String tipoCadastro = "SAVE";
 	
 	private String controlado = "SIM";
-	
+   
 	/// :: Carregar este metodo toda vez que a classe for construida.
 	@PostConstruct
 	public void carregar() {
